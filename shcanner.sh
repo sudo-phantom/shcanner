@@ -13,5 +13,8 @@ cat livehost_standard.gnmap | grep -e 80/open -e 443/open -e 8080/open | cut -d 
 cat livehost_standard.gnmap | grep -e 22/open -e 2222/open | cut -d " " -f 2 > "ssh-hosts.txt"
 sudo masscan -iL ./scope.txt --banners --open -p 22,25,80,443,445,8443,8080,139,135,3389,3306,554,179,161,162,5432 -oL tcp-scan.txt --rate 2000;
 #traceroute hosts
+#
+#ADD section for SSLyze or SSLscan to check for week ciphers and report
+#
 python3 shcanner.py
 #continue interface
