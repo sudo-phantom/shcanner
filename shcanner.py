@@ -1,6 +1,6 @@
 import subprocess
 
-with open("up.txt", "r") as hostlist, open("results.txt", "wb") as output:
+with open("./results/up.txt", "r") as hostlist, open("./results/results.txt", "wb") as output:
     for host in hostlist:
         host = host.strip()
 
