@@ -16,6 +16,6 @@ sudo masscan -iL ./scope.txt --banners --open -p 22,25,80,443,445,8443,8080,139,
 #traceroute hosts
 #ssl checked
 cat ./results/livehost_standard.gnmap | grep -e 22/open -e 4443/open  -e 8443/open | cut -d " " -f 2 > "./results/secure-layer-hosts.txt";
-nmap -sV --script ssl-enum-cuphers -p 443,22,8443 -iL ./results/secure-layer-hosts.txt;
+nmap -sV --script ssl-enum-ciphers -p 443,22,8443 -iL ./results/secure-layer-hosts.txt;
 python3 shcanner.py;
 #continue interface
