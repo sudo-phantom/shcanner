@@ -13,9 +13,17 @@ cat ./results/livehost_icmp.gnmap | grep Up | cut -d " " -f 2 > ./results/up.txt
 cat ./results/livehost_standard.gnmap | grep -e 80/open -e 443/open -e 8080/open | cut -d " " -f 2 > "./results/webhosts.txt";
 cat ./results/livehost_standard.gnmap | grep -e 22/open -e 2222/open | cut -d " " -f 2 > "./results/ssh-hosts.txt";
 sudo masscan -iL ./scope.txt --banners --open -p 22,25,80,443,445,8443,8080,139,135,3389,3306,554,179,161,162,5432 -oL ./results/tcp-scan.txt --rate 2000;
-#traceroute hosts
+
 #ssl checked
 cat ./results/livehost_standard.gnmap | grep -e 22/open -e 4443/open  -e 8443/open | cut -d " " -f 2 > "./results/secure-layer-hosts.txt";
 nmap -sV --script ssl-enum-ciphers -p 443,22,8443 -iL ./results/secure-layer-hosts.txt -oA ./results/SSL-hosts;
-python3 shcanner.py;
+
 #continue interface
+##run Vulscan
+git clone https://github.com/scipag/vulscan scipag_vulscan;
+sudo ln -s `pwd`/scipag_vulscan /usr/share/nmap/scripts/vulscan;
+sudo nmap -vv -sV --script=vulscan/vulscan.nse -iL ./results/webhosts.txt -oA ./results/vulscan;
+
+#traceroute hosts - should thread and place at begining for time save(researching)
+python3 shcanner.py;
+
