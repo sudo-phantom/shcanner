@@ -89,7 +89,7 @@ def cipher_check():
                         print(query2)
                         if "-F" in query2:
                             print(query2 + 'has bad cipher')
-            file = open('./py-results/livewebhosts.xml', 'w')
+            file = open('./py-results/webhosts-results.xml', 'w')
             file.write(query + '|' + query2)
             file.close()
 
