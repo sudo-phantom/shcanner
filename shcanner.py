@@ -120,5 +120,5 @@ if __name__ == "__main__":
     find_live()
     find_webhosts()
     trace_hosts()
-    #cipher_check()
+    cipher_check()
     find_full_scan()
