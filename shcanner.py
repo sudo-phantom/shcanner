@@ -3,6 +3,10 @@ import os
 import sys
 import itertools
 import re
+import os
+from xml.etree import ElementTree as ET
+
+
 #create filesystem
 try:
     os.makedirs("./py-results")
@@ -40,27 +44,17 @@ def find_live():
  
 #section to find web servers 
 temp_foo = []
+results = {}
 def find_webhosts(): 
     with open('scope.txt', 'r') as f:
         for line in f:
             nm = nmap.PortScanner()
-            nm.scan(hosts=line, arguments="-sV -O -vv -iL scope.txt -p 80,443,8080,8443 --script ssl-enum-ciphers -oN ./py-results/livewebhosts.nmap -oG ./py-results/livewebhosts.gnmap")
-            ##nm.scan(hosts=line, arguments="-sn -oG ./py-results/livehosts.gnmap -vv")
-            nm.scaninfo()
-            print('scanning ciphers for: ' + line + '\n')
-
-    with open('./py-results/livewebhosts.gnmap', 'r') as web_grep:
-        for line in web_grep:
-            if web_grep == '80/open' or web_grep == '443/open' or web_grep == '8080/open' or web_grep == '8443/open':
-                foo = ''.join(line).strip()
-                print(foo)
-                temp_foo.append(foo)
-
-    original_stdout = sys.stdout
-    with open('./py-results/webhosts.txt', 'w') as grep_file:
-            sys.stdout = grep_file
-            print(temp_foo)
-            sys.stdout = original_stdout
+            nm.scan(hosts=line, arguments="-sT -O -vv -iL scope.txt -p 80,443,8080,8443 --script ssl-enum-ciphers ") #-oA ./TEST/py-results/livehost_standard")
+            results = nm.get_nmap_last_output()
+            list_results = str(results)
+            file = open('./py-results/livewebhosts.xml', 'wb')
+            file.write(nm.get_nmap_last_output())
+            file.close()
             
 # perform traceroute of the hosts within scope            
 
@@ -69,29 +63,35 @@ def trace_hosts():
      with open('scope.txt', 'r') as f:
         for line in f:
             nm = nmap.PortScanner()
-            nm.scan(hosts=line, arguments="-sn -Pn -iL scope.txt -vv 20 --traceroute -oN ./py-results/tracehosts.nmap -oG ./py-results/tracehosts.gnmap")
+            nm.scan(hosts=line, arguments="-sn -iL scope.txt -vv 20 --traceroute -oN ./py-results/tracehosts.nmap -oG ./py-results/tracehosts.gnmap")
             nm.scaninfo()
             print('Finding routes for: ' + line + '\n')
 
 # this section is to filter through the ssl ciphers and check for weak ciphers
+
 def cipher_check():
-    with open('./py-results/livewebhosts.nmap', 'r') as f:
-        report = f.read()
-
-    hosts = {}
-    for report in re.split("Nmap scan report for ", report):
-        ip = re.search("^(25[0-5]|2[0-4][0-9]|[0-9]|[01]?)(\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)){3}", report)
-        if ip:
-            hosts[ip.group()] = re.findall("(?<= )[A-Z0-9_]+(?=.*\(.*\).*[A-F])", report)
-
-    with open('./reqs/weak-ciphers.txt') as f:
-        weak_ciphers = f.read().splitlines()
-
-    for ip in hosts:
-        for cipher in hosts[ip]:
-            for weak_ciphers in weak_ciphers:
-                if weak_ciphers in cipher:
-                    print(ip + " has weak cipher\"" + cipher + "\"(contains \"" + weak_ciphers + "\")")
+    file = 'livewebhosts.xml'
+    full_file = os.path.abspath(os.path.join( file))
+    dom = ET.parse(full_file)
+    host = dom.findall('host')
+    for c in host:
+        ip = str(c.find('address').attrib).split(":", 1)
+        
+        if c.find('status').get('state') != "down":
+        
+            print(ip)
+            for port in c.iter('ports'):
+                for portid in c.iter('port'):
+                    query =  str(portid.attrib)
+                    print(query)
+                    for table in c.iter('script'):
+                        query2 = str(table.attrib)
+                        print(query2)
+                        if "-F" in query2:
+                            print(query2 + 'has bad cipher')
+            file = open('./py-results/livewebhosts.xml', 'w')
+            file.write(query + '|' + query2)
+            file.close()
 
 #full scan
 temp_bar = []
@@ -120,5 +120,5 @@ if __name__ == "__main__":
     find_live()
     find_webhosts()
     trace_hosts()
-    cipher_check()
+    #cipher_check()
     find_full_scan()
