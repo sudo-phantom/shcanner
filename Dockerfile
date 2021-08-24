@@ -4,7 +4,7 @@ ADD shcanner.py /
 ADD requirements.txt /
 ADD scope.txt /
 RUN mkdir /reqs
-ADD ./reqs/weak-ciphers.txt /reqs
+ADD  /reqs ./reqs/weak-ciphers.txt
 RUN pip install pystrich
 RUN pip install -r requirements.txt
 CMD [ "python3", "./shcanner.py" ]
