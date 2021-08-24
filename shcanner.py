@@ -3,7 +3,6 @@ import os
 import sys
 import itertools
 import re
-import os
 from xml.etree import ElementTree as ET
 
 
