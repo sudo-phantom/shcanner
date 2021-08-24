@@ -70,7 +70,7 @@ def trace_hosts():
 # this section is to filter through the ssl ciphers and check for weak ciphers
 
 def cipher_check():
-    file = 'livewebhosts.xml'
+    file = './py-results/livewebhosts.xml'
     full_file = os.path.abspath(os.path.join( file))
     dom = ET.parse(full_file)
     host = dom.findall('host')
@@ -80,18 +80,19 @@ def cipher_check():
         if c.find('status').get('state') != "down":
         
             print(ip)
-            for port in c.iter('ports'):
-                for portid in c.iter('port'):
-                    query =  str(portid.attrib)
-                    print(query)
-                    for table in c.iter('script'):
-                        query2 = str(table.attrib)
-                        print(query2)
-                        if "-F" in query2:
-                            print(query2 + 'has bad cipher')
-            file = open('./py-results/webhosts-results.xml', 'w')
-            file.write(query + '|' + query2)
-            file.close()
+            for address in c.iter('address'):
+                scope = address.get('addr')
+                print(scope)
+                for port in c.iter('ports'):
+                    for portid in c.iter('port'):
+                        query =  str(portid.attrib)
+                        print(query)
+                        for table in c.iter('script'):
+                            query2 = str(table.attrib)
+                            print(query2)
+                            file = open('./py-results/webhosts-results.csv', 'w')
+                            file.writelines(scope + '|' + query + '|' + query2)
+                            file.close()
 
 #full scan
 temp_bar = []
