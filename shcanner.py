@@ -19,7 +19,7 @@ def find_live():
     with open('scope.txt', 'r') as f:
         for line in f:
             nm = nmap.PortScanner()
-            nm.scan(hosts=line, arguments="-sn -iL scope.txt -oG ./py-results/livehosts.gnmap -vv")
+            nm.scan(hosts=line, arguments="-sn " + str(f) + " -4 -oG ./py-results/livehosts.gnmap -vv")
             nm.scaninfo()
             print("discovering: " + line + " \n")
     query = "Up"
@@ -49,13 +49,13 @@ def find_webhosts():
     with open('scope.txt', 'r') as f:
         for line in f:
             nm = nmap.PortScanner()
-            nm.scan(hosts=line, arguments="-sT -O -vv -iL scope.txt -p 80,443,8080,8443 --script ssl-enum-ciphers ") #-oA ./TEST/py-results/livehost_standard")
+            nm.scan(hosts=line, arguments="-sT -O -vv " + str(f) + " -4 -p 80,443,8080,8443 --script ssl-enum-ciphers ") #-oA ./TEST/py-results/livehost_standard")
             results = nm.get_nmap_last_output()
             list_results = str(results)
             file = open('./py-results/livewebhosts.xml', 'wb')
             file.write(nm.get_nmap_last_output())
             file.close()
-            
+            # Need to add parsing to compare against weak-ciphers.txt
 # perform traceroute of the hosts within scope            
 
 def trace_hosts():
@@ -63,7 +63,7 @@ def trace_hosts():
      with open('scope.txt', 'r') as f:
         for line in f:
             nm = nmap.PortScanner()
-            nm.scan(hosts=line, arguments="-sn -iL scope.txt -vv 20 --traceroute -oN ./py-results/tracehosts.nmap -oG ./py-results/tracehosts.gnmap")
+            nm.scan(hosts=line, arguments="-sn " + str(f) + " -4 -vv 20 --traceroute -oN ./py-results/tracehosts.nmap -oG ./py-results/tracehosts.gnmap")
             nm.scaninfo()
             print('Finding routes for: ' + line + '\n')
 
@@ -104,7 +104,7 @@ def find_full_scan():
     with open('scope.txt', 'r') as f:
         for line in f:
             nm = nmap.PortScanner()
-            nm.scan(hosts=line, arguments="-sV -sC -O -iL scope.txt -vv --top-ports 20  -oN ./py-results/full-hosts.nmap -oG ./py-results/full-hosts.gnmap")
+            nm.scan(hosts=line, arguments="-sV -sC -O " + str(f) + " -4 -vv --top-ports 20  -oN ./py-results/full-hosts.nmap -oG ./py-results/full-hosts.gnmap")
             nm.scaninfo()
             print('scanning full host list for: ' + line + '\n')
 
