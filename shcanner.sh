@@ -7,8 +7,10 @@ sudo apt-get update && sudo apt-get install -y nmap python3 python3-pip tracerou
 
 # run nmap scanns
 mkdir results;
-sudo nmap -sn -iL  scope.txt -oA ./results/livehost_icmp -vv;
-sudo nmap -sT -Pn -vv -p21,22,23,25,80,110,443,513,3389,6000,8080,8443,2222,445,135,139 -iL scope.txt -oA ./results/livehost_standard;
+mkdir py-results;
+nmap -sn -iL  scope.txt -oA ./results/livehost_icmp -vv;
+sudo nmap -sT -Pn -vv --top-ports 20 -iL scope.txt -oA ./results/livehost_standard;
+nmap -sn -iL scope.txt -4 -vv 20 --traceroute -oA ./results/tracehosts;
 cat ./results/livehost_icmp.gnmap | grep Up | cut -d " " -f 2 > ./results/up.txt | nmap -n -Pn -iL up.txt -vv -oG ./results/full_livehosts;
 cat ./results/livehost_standard.gnmap | grep -e 80/open -e 443/open -e 8080/open | cut -d " " -f 2 > "./results/webhosts.txt";
 cat ./results/livehost_standard.gnmap | grep -e 22/open -e 2222/open | cut -d " " -f 2 > "./results/ssh-hosts.txt";
@@ -16,14 +18,10 @@ sudo masscan -iL ./scope.txt --banners --open -p 22,25,80,443,445,8443,8080,139,
 
 #ssl checked
 cat ./results/livehost_standard.gnmap | grep -e 22/open -e 4443/open  -e 8443/open | cut -d " " -f 2 > "./results/secure-layer-hosts.txt";
-nmap -sV --script ssl-enum-ciphers -p 443,22,8443 -iL ./results/secure-layer-hosts.txt -oA ./results/SSL-hosts;
+sudo nmap -sV --script ssl-enum-ciphers -p 443,22,8443 -iL ./results/secure-layer-hosts.txt -oA ./results/SSL-hosts;
 
 #continue interface
 ##run Vulscan
 git clone https://github.com/scipag/vulscan scipag_vulscan;
 sudo ln -s `pwd`/scipag_vulscan /usr/share/nmap/scripts/vulscan;
 sudo nmap -vv -sV --script=vulscan/vulscan.nse -iL ./results/webhosts.txt -oA ./results/vulscan;
-
-#traceroute hosts - should thread and place at begining for time save(researching)
-python3 shcanner.py;
-
