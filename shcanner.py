@@ -3,6 +3,7 @@ import os
 import sys
 import itertools
 import re
+import xmltodict, json
 
 from xml.etree import ElementTree as ET
 
@@ -70,33 +71,13 @@ def trace_hosts():
 # this section is to filter through the ssl ciphers and check for weak ciphers
 
 def cipher_check():
-    file = './py-results/livewebhosts.xml'
-    full_file = os.path.abspath(os.path.join( file))
-    dom = ET.parse(full_file)
-    host = dom.findall('host')
-    file = open('./py-results/webhosts-results.csv', 'w')
-    file.write(" ")
+#parse xml to json
+    with open("./py-results/livewebhosts.xml") as file:
+        obj = xmltodict.parse(file.read())
+    webhosts = json.dumps(obj)
+    file = open("./py-results/live-webhosts.json", "w")
+    file.write(webhosts)
     file.close()
-    for c in host:
-        ip = str(c.find('address').attrib).split(":", 1)
-        
-        if c.find('status').get('state') != "down":
-        
-            print(ip)
-            
-            for address in c.iter('address'):
-                scope = address.get('addr')
-                print(scope)
-                for port in c.iter('ports'):
-                    for portid in c.iter('port'):
-                        query =  str(portid.attrib)
-                        print(query)
-                        for table in c.iter('script'):
-                            query2 = str(table.attrib)
-                            print(query2)
-                            file = open('./py-results/webhosts-results.csv', 'a')
-                            file.write(scope + '|' + query + '|' + query2)
-                            file.close()
 
 #full scan
 temp_bar = []
