@@ -48,7 +48,7 @@ def find_webhosts():
 
     print("finding services for: " )
     nm = nmap.PortScanner()
-    raw = nm.scan('nmap -sV -iL ./py-results/up.txt -sC -vv -4 -p 80,443,8080,8443 --script ssl-enum-ciphers -oN ./py-results/webhost.nmap')
+    raw = nm.scan('nmap -sV -iL ./py-results/up.txt -sC -vv -4 -p 80,443,8080,8443,8000,8888 --script ssl-enum-ciphers -oN ./py-results/webhost.nmap')
     print(nm.csv(),  file=open('./py-results/livewebhosts.csv', 'w'))
 
                
@@ -70,7 +70,7 @@ def trace_hosts():
 temp_bar = []
 def find_full_scan(): 
         nm = nmap.PortScanner()
-        raw = nm.scan('nmap -sV -sC -O -iL ./py-results/up.txt -4 -vv --top-ports 20  -oN ./py-results/full-hosts.nmap')
+        raw = nm.scan('nmap -sV -sC -iL ./py-results/up.txt -4 -vv --top-ports 50  -oN ./py-results/full-hosts.nmap')
         print(nm.csv(),  file=open('./py-results/Full-hosts.csv', 'w'))
         print('scanning full host list for \n')
 
