@@ -7,7 +7,7 @@ from pandas import json_normalize
 from pandas.core.frame import DataFrame
 from pandas.io.parsers import read_csv
 
-parser = argparse.ArgumentParser(description='convert nmap json files to table')
+parser = argparse.ArgumentParser(description='convert nmap csv files to table')
 parser.add_argument('input_file', type=argparse.FileType('r'))
 args = parser.parse_args()
 
