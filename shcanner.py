@@ -57,14 +57,10 @@ def find_webhosts():
 # perform traceroute of the hosts within scope            
 
 def trace_hosts():
-
-     with open('./py-results/up.txt', 'r') as f:
-            for line in f:
-                print("finding routes for: " + line )
-                nm = nmap.PortScanner()
-                raw = nm.scan('nmap -sn -iL ./py-results/up.txt -4 -vv 20 --traceroute -oN ./py-results/trace-hosts.nmap')
-                print(nm.csv(),  file=open('./py-results/trace-hosts.csv', 'w'))
-
+    nm = nmap.PortScanner()
+    raw = nm.scan('nmap -sn -iL ./py-results/up.txt -4 -vv 20 --traceroute -oN ./py-results/trace-hosts.nmap')
+    print(nm.csv(),  file=open('./py-results/trace-hosts.csv', 'w'))
+    print("finding routes for: " + nm.scanstats)
 
 #full scan
 temp_bar = []
