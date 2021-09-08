@@ -10,7 +10,7 @@ mkdir results;
 mkdir py-results;
 nmap -sn -iL  scope.txt -oA ./results/livehost_icmp -vv;
 sudo nmap -sT -Pn -vv --top-ports 20 -iL scope.txt -oA ./results/livehost_standard;
-nmap -sn -iL scope.txt -4 -vv 20 --traceroute -oA ./results/tracehosts;
+sudo nmap -sn -iL scope.txt -4 -vv 20 --traceroute -oA ./results/tracehosts;
 cat ./results/livehost_icmp.gnmap | grep Up | cut -d " " -f 2 > ./results/up.txt | nmap -n -Pn -iL up.txt -vv -oG ./results/full_livehosts;
 cat ./results/livehost_standard.gnmap | grep -e 80/open -e 443/open -e 8080/open | cut -d " " -f 2 > "./results/webhosts.txt";
 cat ./results/livehost_standard.gnmap | grep -e 22/open -e 2222/open | cut -d " " -f 2 > "./results/ssh-hosts.txt";
