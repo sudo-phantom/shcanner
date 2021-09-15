@@ -37,7 +37,7 @@ with open('./py-results/livehosts.gnmap', 'r') as grep:
         file.write('\n'.join(temp))
         file.close()
 
-#section to find web servers 
+#section to find web servers. 
 def find_webhosts(): 
     '''with open('./py-results/up.txt', 'r') as f:
             for line in f: '''
