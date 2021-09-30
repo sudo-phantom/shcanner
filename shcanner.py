@@ -1,4 +1,5 @@
 import nmap
+from concurrent.futures import ThreadPoolExecutor
 import os
 from bs4 import BeautifulSoup
 import sys
@@ -15,34 +16,33 @@ try:
 except FileExistsError:
     # directory already exists
     pass
-
+query = "Up"
+temp = []
 def find_live():
         nm = nmap.PortScanner()
         nm.scan("nmap -sn -iL scope.txt -4 -oG ./py-results/livehosts.gnmap -vv -oN ./py-results/currently-acive.nmap")
         nm.scaninfo()
         print("discovering live hosts: \n")
 #search for hosts that are UP   
-query = "Up"
-temp = []
 
-with open('./py-results/livehosts.gnmap', 'r') as grep:
-    for line in grep:
-        if query in line:
-            bar = ''.join(line).strip()
+
+        with open('./py-results/livehosts.gnmap', 'r') as grep:
+            for line in grep:
+             if query in line:
+                bar = ''.join(line).strip()
                 #temp.append(bar.split(' ', 1))
-            bar_title, bar_ip, bar_status, bar_stat = bar.split(' ')
-            print(bar_ip + ' - ' + bar_stat)
-            temp.append(bar_ip)
-        file = open('./py-results/up.txt', 'w')
-        file.write('\n'.join(temp))
-        file.close()
+                bar_title, bar_ip, bar_status, bar_stat = bar.split(' ')
+                print(bar_ip + ' - ' + bar_stat)
+                temp.append(bar_ip)
+                file = open('./py-results/up.txt', 'w')
+                file.write('\n'.join(temp))
+                file.close()
 
-#section to find web servers. 
+#section to find web servers 
 def find_webhosts(): 
-    '''with open('./py-results/up.txt', 'r') as f:
-            for line in f: '''
-
+    
     print("finding services: " )
+    
     nm = nmap.PortScanner()
     nm.scan('nmap -sV -iL ./py-results/up.txt -sC -vv -4 -p 80,443,8080,8443,8000,8888 --script ssl-enum-ciphers -oN ./py-results/webhost.nmap')
     print(nm.csv(),  file=open('./py-results/livewebhosts.csv', 'w'))
@@ -71,6 +71,7 @@ def find_full_scan():
 
 if __name__ == "__main__":
     find_live()
-    find_webhosts()
-    trace_hosts()
-    find_full_scan()
+    with ThreadPoolExecutor(max_workers= 7) as executor:
+        executor.map(find_webhosts())
+        executor.map(trace_hosts())
+        executor.map(find_full_scan())
