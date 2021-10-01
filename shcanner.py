@@ -1,11 +1,7 @@
 import nmap
 from concurrent.futures import ThreadPoolExecutor
 import os
-from bs4 import BeautifulSoup
 import sys
-import itertools
-import re
-import xmltodict, json
 
 #from xml.etree import ElementTree as ET
 
@@ -20,7 +16,7 @@ query = "Up"
 temp = []
 def find_live():
         nm = nmap.PortScanner()
-        nm.scan("nmap -sn -iL scope.txt -4 -oG ./py-results/livehosts.gnmap -vv -oN ./py-results/currently-acive.nmap")
+        nm.scan("nmap -sn -iL scope.txt -4 -oG ./py-results/livehosts.gnmap --privileged -vv -oN ./py-results/currently-acive.nmap")
         nm.scaninfo()
         print("discovering live hosts: \n")
 #search for hosts that are UP   
@@ -44,7 +40,7 @@ def find_webhosts():
     print("finding services: " )
     
     nm = nmap.PortScanner()
-    nm.scan('nmap -sV -iL ./py-results/up.txt -sC -vv -4 -p 80,443,8080,8443,8000,8888 --script ssl-enum-ciphers -oN ./py-results/webhost.nmap')
+    nm.scan('nmap -sV -iL ./py-results/up.txt -sC -vv -4 -p 80,443,8080,8443,8000,8888 --script ssl-enum-ciphers --privileged -oN ./py-results/webhost.nmap')
     print(nm.csv(),  file=open('./py-results/livewebhosts.csv', 'w'))
 
                
@@ -54,7 +50,7 @@ def find_webhosts():
 
 def trace_hosts():
     nm = nmap.PortScanner()
-    nm.scan('nmap -sn -iL scope.txt -4 -vv 20 --traceroute -oN ./py-results/trace-hosts.nmap')
+    nm.scan('nmap -sn -iL scope.txt -4 -vv 20 --traceroute --privileged -oN ./py-results/trace-hosts.nmap')
     print(nm.csv(),  file=open('./py-results/trace-hosts.csv', 'w'))
     print("finding routes: " )
 
@@ -63,7 +59,7 @@ def trace_hosts():
 temp_bar = []
 def find_full_scan(): 
         nm = nmap.PortScanner()
-        nm.scan('nmap -sV -sC -iL ./py-results/up.txt -4 -vv --top-ports 50  -oN ./py-results/full-hosts.nmap')
+        nm.scan('nmap -sV -sC -iL ./py-results/up.txt -4 -vv --privileged --top-ports 50  -oN ./py-results/full-hosts.nmap')
         print(nm.csv(),  file=open('./py-results/Full-hosts.csv', 'w'))
         print('scanning full host list for \n')
 
