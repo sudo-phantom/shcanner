@@ -1,3 +1,4 @@
 python-nmap
 tabulate
 bs4
+xmltodict
