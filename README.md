@@ -27,6 +27,7 @@ optional arguments:
 to run the docker image.
 ```
 docker build -t shcanner/sudosec .
+docker run -it shcanner/sudosec /bin/bash
 ```
 
 -------------------------------------------------------------------------------------------------
