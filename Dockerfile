@@ -1,5 +1,7 @@
 FROM kalilinux/kali-rolling
 RUN apt-get update && apt-get upgrade -y && apt-get install -y  nmap python3 python3-pip
+RUN mkdir /home/shcanner/
+RUN cd /home/shcanner
 ADD shcanner.py /
 ADD requirements.txt /
 ADD scope.txt /
