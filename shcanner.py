@@ -85,15 +85,17 @@ def find_ciphers():
         content_list = f.readlines()
         #print(content_list)
     #open weak ciphers into a list    
-    with open('./reqs/weak-ciphers.txt') as p:
+    with open('./reqs/weak-ciphers') as p:
         weak_ciphers = p.readlines()
-        print(weak_ciphers.strip())
+        print(weak_ciphers)
     #compare ciphers lists
     found_cipher = []
     for weak_cipher in weak_ciphers:
         if weak_cipher in content_list:
             print(f'detected {weak_cipher}')
-            found_cipher.append(weak_cipher.strip())
+            strtemp = ';'.join(weak_cipher)
+            weak_item = strtemp.split(';')
+            found_cipher.append(weak_item)
     #print output of ciphers
     with open(f'./py-results/{output}-compared-ciphers.txt', 'w') as file_out:
      if weak_cipher in found_cipher:
