@@ -24,6 +24,12 @@ optional arguments:
                     
 -----------------------------------------------------------------------------------------------
 
+to run the docker image.
+
+[docker build -t shcanner/sudosec .]
+
+
+-------------------------------------------------------------------------------------------------
 python3 table_maker.py ./py-results/<livewebhosts.csv> or whichever file you'd like in table form
 
 
