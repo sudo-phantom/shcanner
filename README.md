@@ -29,7 +29,10 @@ to run the docker image.
 docker build -t shcanner/sudosec .
 docker run -it shcanner/sudosec /bin/bash
 ```
-
+once you have ran the python script inside the docker container you can copy files from the container to the host by
+```
+docker cp <containerId>:/file/path/in/container/file /host/local/path/file
+```
 -------------------------------------------------------------------------------------------------
 ```
 python3 table_maker.py ./py-results/<livewebhosts.csv> or whichever file you'd like in table form
