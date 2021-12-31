@@ -7,4 +7,4 @@ RUN mkdir ./reqs
 ADD  /reqs ./reqs
 RUN pip install pystrich
 RUN pip install -r requirements.txt
-CMD [ "python3", "./shcanner.py -f scope.txt " ]
+ENTRYPOINT [ "python3" , "shcanner.py",  "-f", "scope.txt" ]
