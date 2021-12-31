@@ -3,8 +3,8 @@ RUN apt-get update && apt-get upgrade -y && apt-get install -y  nmap python3 pyt
 ADD shcanner.py /
 ADD requirements.txt /
 ADD scope.txt /
-RUN mkdir /reqs
-ADD  /reqs /reqs
+RUN mkdir ./reqs
+ADD  /reqs ./reqs
 RUN pip install pystrich
 RUN pip install -r requirements.txt
 CMD [ "python3", "./shcanner.py -f scope.txt " ]
