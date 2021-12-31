@@ -27,7 +27,7 @@ optional arguments:
 to run the docker image.
 ```
 docker build -t shcanner/sudosec .
-docker run -it shcanner/sudosec /bin/bash
+docker run -it shcanner/sudosec
 ```
 once you have ran the python script inside the docker container you can copy files from the container to the host by
 ```
