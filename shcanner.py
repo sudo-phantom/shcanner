@@ -85,7 +85,7 @@ def find_ciphers():
         content_list = f.readlines()
         #print(content_list)
     #open weak ciphers into a list    
-    with open('./reqs/weak-ciphers') as p:
+    with open('./reqs/weak-ciphers.txt') as p:
         weak_ciphers = p.readlines()
         print(weak_ciphers.strip())
     #compare ciphers lists
