@@ -2,14 +2,14 @@
 sh...scanner
 
 edit scope.txt file to fit IP needs
-
-run: sh shcanner.sh
-
+{
+sh shcanner.sh
+}
 
 -----------------------------------------
-
+{
 python3 shcanner.py -h
-
+}
 usage: shcanner.py [-h] [-n NETWORK] [-f FILE] [-o OUTPUT]
 
 Network segmentation automation validation tool.
@@ -25,9 +25,9 @@ optional arguments:
 -----------------------------------------------------------------------------------------------
 
 to run the docker image.
-
-[docker build -t shcanner/sudosec .]
-
+{
+docker build -t shcanner/sudosec .
+}
 
 -------------------------------------------------------------------------------------------------
 python3 table_maker.py ./py-results/<livewebhosts.csv> or whichever file you'd like in table form
