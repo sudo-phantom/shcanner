@@ -9,7 +9,7 @@ jobs:
 
   build:
 
-    runs-on: kalilinux/kali-rolling
+    runs-on: kalilinux/kali-rolling:latest
 
     steps:
     -
