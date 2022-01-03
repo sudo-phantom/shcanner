@@ -140,5 +140,5 @@ if __name__ == "__main__":
     with ThreadPoolExecutor(max_workers= 7) as executor:
         executor.map(find_webhosts())
         executor.map(trace_hosts())
-        executor.map(find_ciphers())
         executor.map(find_full_scan())
+    find_ciphers()
