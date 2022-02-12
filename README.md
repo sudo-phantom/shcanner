@@ -10,6 +10,7 @@ sh shcanner.sh
 ```
 python3 shcanner.py -h
 ```
+```
 usage: shcanner.py [-h] [-n NETWORK] [-f FILE] [-o OUTPUT]
 
 Network segmentation automation validation tool.
@@ -21,7 +22,7 @@ optional arguments:
   -f FILE, --file FILE  option to use file containing multiple networks, or ip address
   -o OUTPUT, --output OUTPUT
                         optional ouput name to prepend to scan outputs.
-                    
+```                    
 -----------------------------------------------------------------------------------------------
 
 to run the docker image.
